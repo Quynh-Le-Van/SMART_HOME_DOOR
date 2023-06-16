@@ -1,1 +1,3 @@
-# SMART_HOME_DOOR
+# SMART_HOME_DOOR With Stm32 
+Components : Stm32f103c8t6 , Max7219 , ServoMG908 , Touch switch TTP226 , Infrared Sensor , HC-05 
+Description : Open door by typing a correct password by tôuch switch . The door will open ,and notify you if the door is still open after 1 minute by phone using bluetooth protocol, if you intentionally leave it open type "open" the notification will stop,or if you forget to close the door type "close" the door will stop automatically close . The IR sensor will check whether the door is closed or open. You can also enter the password through the phone using the terminal of any bluetooth application.
