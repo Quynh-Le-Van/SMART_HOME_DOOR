@@ -127,15 +127,15 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
 	if(huart->Instance == USART2)
 	{
-    if(rxData!=13) 
-    {
-    	RxData[index++] = rxData;
-    }
-    else if (rxData==13) 
-    {
-    	index = 0 ;
+    		if(rxData!=13) 
+    		{
+    			RxData[index++] = rxData;
+    		}
+    		else if (rxData==13) 
+    		{
+    			index = 0 ;
 			flag = 1 ;
-    }
+    		}
 		
 	}
   HAL_UART_Receive_IT(&huart2,&rxData,1); // Enabling interrupt receive again
@@ -318,7 +318,7 @@ void CheckPassWord(){
 	
 	
 	// type password if door close 
-	while( count<3 && state == 0)
+	while( count<3 && state == 0 && flag!=1)
 	{	
 		
 		
@@ -372,7 +372,7 @@ void CheckPassWord(){
 				
 				while (count_warming ++ < 10)
 				{
-					HAL_UART_Transmit(&huart3,warming_buff,sizeof(warming_buff)-1,1000);
+					HAL_UART_Transmit(&huart2,warming_buff,sizeof(warming_buff)-1,1000);
 					Sound();
 					
 					if (strcmp((char*)RxData,(char*)open)==0)
@@ -381,10 +381,10 @@ void CheckPassWord(){
 						DisplayOpen();
 						count =0 ;
 						state = 0;
-						HAL_TIM_PWM_Stop(&htim3,TIM_CHANNEL_1);
 						rxData = 0;
 						memset(RxData,0,sizeof(RxData));
 						isopen = 1;
+						flag=0;
 						break ;
 					}
 					else if( strcmp( (char*)RxData,(char*)close)==0)
@@ -397,6 +397,7 @@ void CheckPassWord(){
 						rxData = 0;
 						rxData = 0;
 						memset(RxData,0,sizeof(RxData));
+						flag=0;
 						break;
 					}
 					HAL_Delay(1000);
@@ -420,9 +421,9 @@ void CheckPassWord(){
 			isopen = 0;
 	}
 	
-	if(strcmp((char*)RxData,(char*)open)==0 && state ==0 )
+	if(strcmp((char*)RxData,(char*)open)==0 && state ==0 && flag == 1 )
 	{
-		HAL_UART_Transmit(&huart3,requird_pass,sizeof(requird_pass)-1,1000);
+		HAL_UART_Transmit(&huart2,requird_pass,sizeof(requird_pass)-1,1000);
 		memset(RxData,0,sizeof(RxData));
 		
 		if ( strcmp(user_key,password)==0)
@@ -438,7 +439,7 @@ void CheckPassWord(){
 				count=0;
 				DisplayPassWordClear();
 			}
-		
+		flag =0 ;
 	}
 	
 }
